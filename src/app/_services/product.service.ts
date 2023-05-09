@@ -14,4 +14,22 @@ export class ProductService {
       product
     );
   }
+
+  public getAllProducts() {
+    return this.httpCient.get<Product[]>(
+      'http://localhost:8083/product/getAllProducts'
+    );
+  }
+
+  public deleteProduct(productId: number) {
+    return this.httpCient.delete(
+      'http://localhost:8083/product/deleteProduct/' + productId
+    );
+  }
+
+  public getProductById(productId: number) {
+    return this.httpCient.get<Product>(
+      'http://localhost:8083/product/getProductById/' + productId
+    );
+  }
 }

@@ -38,7 +38,7 @@
               matInput
               placeholder="Product Discount Price"
             />
-            <mat-hint>PProduct Discount Price</mat-hint>
+            <mat-hint>Product Discount Price</mat-hint>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="w-100">
@@ -55,6 +55,7 @@
           </mat-form-field>
           <div align="end">
             <button
+              *ngIf="isNewProduct"
               type="submit"
               mat-stroked-button
               color="primary"
@@ -62,7 +63,27 @@
             >
               Add Product
             </button>
-            <button mat-stroked-button color="primary">Clear</button>
+            <button
+              *ngIf="!isNewProduct"
+              type="submit"
+              mat-stroked-button
+              color="primary"
+              style="margin-right: 3px"
+            >
+              Update Product
+            </button>
+            <button
+              mat-stroked-button
+              color="primary"
+              *ngIf="!isNewProduct"
+              (click)="clear()"
+            >
+              Add New Product
+            </button>
+
+            <button mat-stroked-button color="primary" *ngIf="isNewProduct">
+              Clear
+            </button>
           </div>
         </form>
       </div>

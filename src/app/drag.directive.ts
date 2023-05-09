@@ -5,7 +5,7 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core';
-import { FileHandel } from './_model/file.model';
+import { FileHandle } from './_model/file.model';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Directive({
@@ -13,7 +13,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class DragDirective {
   constructor(private sanitizer: DomSanitizer) {}
-  @Output() files: EventEmitter<FileHandel[]> = new EventEmitter();
+  @Output() files: EventEmitter<FileHandle[]> = new EventEmitter();
   @HostBinding('style.background') private background = '#eee';
   @HostListener('dragover', ['$event'])
   public onDragOver(event: DragEvent) {
@@ -53,13 +53,13 @@ export class DragDirective {
     event.stopPropagation();
     this.background = '#eee';
 
-    let filesHandel: FileHandel[] = [];
+    let filesHandel: FileHandle[] = [];
     const filesList: any = event.dataTransfer?.files;
     for (let i = 0; i < filesList.length; i++) {
       const url = this.sanitizer.bypassSecurityTrustUrl(
         window.URL.createObjectURL(filesList[i])
       );
-      const fileHandel: FileHandel = {
+      const fileHandel: FileHandle = {
         file: filesList[i],
         url: url,
       };

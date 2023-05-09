@@ -29,6 +29,14 @@
   >
     Add New Product
   </button>
+  <button
+    *ngIf="isAdmin()"
+    mat-raised-button
+    color="primary"
+    routerLink="/showProductDetails"
+  >
+    Show Product Details
+  </button>
 </mat-toolbar>
 
 <!-- <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
