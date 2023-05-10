@@ -13,6 +13,13 @@ export class UserService {
     private userAuthService: UserAuthService
   ) {}
 
+  public register(registerData: any) {
+    return this.httpClient.post(
+      this.PATH_OF_API + '/registerNewUser',
+      registerData
+    );
+  }
+
   public login(loginData: any) {
     return this.httpClient.post(this.PATH_OF_API + '/authenticate', loginData, {
       headers: this.requestHeader,
