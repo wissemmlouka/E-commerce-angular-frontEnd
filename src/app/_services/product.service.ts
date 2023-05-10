@@ -16,9 +16,9 @@ export class ProductService {
     );
   }
 
-  public getAllProducts() {
+  public getAllProducts(pageNumber: number) {
     return this.httpCient.get<Product[]>(
-      'http://localhost:8083/product/getAllProducts'
+      'http://localhost:8083/product/getAllProducts?pageNumber=' + pageNumber
     );
   }
 

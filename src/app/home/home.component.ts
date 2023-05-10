@@ -17,6 +17,7 @@ export class HomeComponent implements OnInit {
     private imageProcessingService: ImageProcessingService,
     private router: Router
   ) {}
+  pageNumber: number = 0;
   productDetails: Product[] = [];
   ngOnInit(): void {
     this.getAllProducts();
@@ -24,7 +25,7 @@ export class HomeComponent implements OnInit {
 
   public getAllProducts() {
     this.productService
-      .getAllProducts()
+      .getAllProducts(this.pageNumber)
       .pipe(
         map((x: Product[]) =>
           x.map((product: Product) =>
@@ -34,8 +35,8 @@ export class HomeComponent implements OnInit {
       )
       .subscribe(
         (res: Product[]) => {
-          //  console.log(res);
-          this.productDetails = res;
+          res.forEach((p) => this.productDetails.push(p));
+          //this.productDetails = res;
         },
         (error: HttpErrorResponse) => {
           console.log(error);
@@ -46,4 +47,16 @@ export class HomeComponent implements OnInit {
   public showProductDetails(productId: number) {
     this.router.navigate(['/productViewDetails', { productId: productId }]);
   }
+
+  public loadNextPage() {
+    this.pageNumber++;
+    this.getAllProducts();
+  }
+
+  /*   public loadPreviousPage() {
+    if (this.pageNumber > 0) {
+      this.pageNumber--;
+      this.getAllProducts();
+    }
+  } */
 }

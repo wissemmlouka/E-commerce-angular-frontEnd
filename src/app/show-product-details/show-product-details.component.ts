@@ -21,6 +21,8 @@ export class ShowProductDetailsComponent implements OnInit {
     private router: Router
   ) {}
   productDetails: Product[] = [];
+  pageNumber: number = 0;
+  showTable = false;
   displayedColumns: string[] = [
     'Id',
     'Product Name',
@@ -35,8 +37,9 @@ export class ShowProductDetailsComponent implements OnInit {
   }
 
   public getAllProduct() {
+    this.showTable = false;
     this.productService
-      .getAllProducts()
+      .getAllProducts(this.pageNumber)
       .pipe(
         map((x: Product[], i: any) =>
           x.map((product: Product) =>
@@ -47,7 +50,9 @@ export class ShowProductDetailsComponent implements OnInit {
       .subscribe(
         (res: Product[]) => {
           //console.log(res);
-          this.productDetails = res;
+          res.forEach((p) => this.productDetails.push(p));
+          this.showTable = true;
+          //this.productDetails = res;
         },
         (error: HttpErrorResponse) => {
           console.log(error);
@@ -78,5 +83,10 @@ export class ShowProductDetailsComponent implements OnInit {
 
   public editProduct(id: number) {
     this.router.navigate(['/addNewProduct', { productId: id }]);
+  }
+
+  public loadMoreProducts() {
+    this.pageNumber++;
+    this.getAllProduct();
   }
 }
