@@ -10,7 +10,6 @@ export class ShowProductImagesDialogComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
 
   ngOnInit(): void {
-    console.log('blabalaba:  ');
     console.log(this.data);
   }
 }

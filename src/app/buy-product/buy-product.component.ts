@@ -12,7 +12,7 @@ import { ProductService } from '../_services/product.service';
 })
 export class BuyProductComponent implements OnInit {
   constructor(
-    private avtivatedRoute: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private productService: ProductService,
     private router: Router
   ) {}
@@ -24,28 +24,33 @@ export class BuyProductComponent implements OnInit {
     alternateNumber: '',
     orderProductQuantities: [],
   };
+
+  isSingleProductCheckout: any = null;
   ngOnInit(): void {
-    this.productDetails = this.avtivatedRoute.snapshot.data['productDetails'];
+    this.productDetails = this.activatedRoute.snapshot.data['productDetails'];
     this.productDetails.forEach((product) =>
       this.orderDetails.orderProductQuantities.push({
         productId: product.productId,
         quantity: 1,
       })
     );
-    console.log(this.productDetails);
-    console.log(this.orderDetails);
+    this.isSingleProductCheckout = this.activatedRoute.snapshot.paramMap.get(
+      'isSingleProductCheckout'
+    );
   }
 
   public placeOrder(orderForm: NgForm) {
-    this.productService.placeOrder(this.orderDetails).subscribe(
-      (res) => {
-        orderForm.reset();
-        this.router.navigate(['/orderConfirm']);
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
+    this.productService
+      .placeOrder(this.orderDetails, this.isSingleProductCheckout)
+      .subscribe(
+        (res) => {
+          orderForm.reset();
+          this.router.navigate(['/orderConfirm']);
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
   }
 
   public getQuantityForProduct(productId: number) {

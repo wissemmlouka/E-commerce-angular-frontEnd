@@ -48,10 +48,31 @@ export class ProductService {
     );
   }
 
-  public placeOrder(orderDetails: OrderDetails) {
+  public placeOrder(
+    orderDetails: OrderDetails,
+    isSingleProductCheckout: boolean
+  ) {
+    console.log('rfrfrfrf', isSingleProductCheckout);
+
     return this.httpCient.post<OrderDetails>(
-      'http://localhost:8083/placeOrder',
+      'http://localhost:8083/placeOrder/' + isSingleProductCheckout,
       orderDetails
+    );
+  }
+
+  public addToCart(productId: number) {
+    return this.httpCient.get(
+      'http://localhost:8083/cart/addToCart/' + productId
+    );
+  }
+
+  public getCartDetails() {
+    return this.httpCient.get('http://localhost:8083/cart/getCartDetails');
+  }
+
+  public deleteCardItem(cartId: number) {
+    return this.httpCient.delete(
+      'http://localhost:8083/cart/deleteCartItem/' + cartId
     );
   }
 }
