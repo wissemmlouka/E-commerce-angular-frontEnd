@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Product } from '../_model/product.model';
 import { OrderDetails } from '../_model/order-details.model';
+import { Order } from '../_model/orders.model';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -31,7 +33,7 @@ export class ProductService {
     );
   }
 
-  public getProductById(productId: number) {
+  public getProductById(productId: number): Observable<Product> {
     return this.httpCient.get<Product>(
       'http://localhost:8083/product/getProductById/' + productId
     );
@@ -66,13 +68,29 @@ export class ProductService {
     );
   }
 
-  public getCartDetails() {
+  public getCartDetails(): Observable<any> {
     return this.httpCient.get('http://localhost:8083/cart/getCartDetails');
   }
 
   public deleteCardItem(cartId: number) {
     return this.httpCient.delete(
       'http://localhost:8083/cart/deleteCartItem/' + cartId
+    );
+  }
+
+  public getMyOrders(): Observable<Order[]> {
+    return this.httpCient.get<Order[]>('http://localhost:8083/getOrderDetails');
+  }
+
+  public getAllOrders(status: String): Observable<Order[]> {
+    return this.httpCient.get<Order[]>(
+      'http://localhost:8083/getAllOrderDetails/' + status
+    );
+  }
+
+  public delivredOrder(orderId: number): Observable<Order> {
+    return this.httpCient.get<Order>(
+      'http://localhost:8083/orderDelivered/' + orderId
     );
   }
 }
