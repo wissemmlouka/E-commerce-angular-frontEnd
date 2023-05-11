@@ -20,6 +20,7 @@ export class ShowProductDetailsComponent implements OnInit {
     private imageProcessingService: ImageProcessingService,
     private router: Router
   ) {}
+  searchKey: String = '';
   productDetails: Product[] = [];
   pageNumber: number = 0;
   showTable = false;
@@ -39,7 +40,7 @@ export class ShowProductDetailsComponent implements OnInit {
   public getAllProduct() {
     this.showTable = false;
     this.productService
-      .getAllProducts(this.pageNumber)
+      .getAllProducts(this.pageNumber, this.searchKey)
       .pipe(
         map((x: Product[], i: any) =>
           x.map((product: Product) =>
@@ -87,6 +88,13 @@ export class ShowProductDetailsComponent implements OnInit {
 
   public loadMoreProducts() {
     this.pageNumber++;
+    this.getAllProduct();
+  }
+
+  searchByKeyWord(searchKey: String) {
+    this.pageNumber = 0;
+    this.productDetails = [];
+    this.searchKey = searchKey;
     this.getAllProduct();
   }
 }

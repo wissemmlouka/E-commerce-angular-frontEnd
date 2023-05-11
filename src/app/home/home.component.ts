@@ -17,6 +17,7 @@ export class HomeComponent implements OnInit {
     private imageProcessingService: ImageProcessingService,
     private router: Router
   ) {}
+  searchKey: String = '';
   pageNumber: number = 0;
   productDetails: Product[] = [];
   ngOnInit(): void {
@@ -25,7 +26,7 @@ export class HomeComponent implements OnInit {
 
   public getAllProducts() {
     this.productService
-      .getAllProducts(this.pageNumber)
+      .getAllProducts(this.pageNumber, this.searchKey)
       .pipe(
         map((x: Product[]) =>
           x.map((product: Product) =>
@@ -52,11 +53,10 @@ export class HomeComponent implements OnInit {
     this.pageNumber++;
     this.getAllProducts();
   }
-
-  /*   public loadPreviousPage() {
-    if (this.pageNumber > 0) {
-      this.pageNumber--;
-      this.getAllProducts();
-    }
-  } */
+  public searchByKeyWord(searchKey: String) {
+    this.searchKey = searchKey;
+    this.pageNumber = 0;
+    this.productDetails = [];
+    this.getAllProducts();
+  }
 }
