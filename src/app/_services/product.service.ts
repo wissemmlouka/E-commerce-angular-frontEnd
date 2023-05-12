@@ -93,4 +93,10 @@ export class ProductService {
       'http://localhost:8083/orderDelivered/' + orderId
     );
   }
+
+  public createTransaction(amount: number) {
+    return this.httpCient.get(
+      'http://localhost:8083/createTransaction/' + amount
+    );
+  }
 }

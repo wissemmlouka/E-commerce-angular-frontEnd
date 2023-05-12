@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Injector, NgZone, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { OrderDetails } from '../_model/order-details.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from '../_model/product.model';
 import { ProductService } from '../_services/product.service';
-
+declare var Razorpay: any;
 @Component({
   selector: 'app-buy-product',
   templateUrl: './buy-product.component.html',
@@ -14,7 +14,8 @@ export class BuyProductComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private productService: ProductService,
-    private router: Router
+    private router: Router,
+    private injector: Injector
   ) {}
   productDetails: Product[] = [];
   orderDetails: OrderDetails = {
@@ -45,7 +46,10 @@ export class BuyProductComponent implements OnInit {
       .subscribe(
         (res) => {
           orderForm.reset();
-          this.router.navigate(['/orderConfirm']);
+          const ngZone = this.injector.get(NgZone);
+          ngZone.run(() => {
+            this.router.navigate(['/orderConfirm']);
+          });
         },
         (err) => {
           console.log(err);
@@ -80,5 +84,50 @@ export class BuyProductComponent implements OnInit {
       },
       0
     );
+  }
+
+  public createTransactionAndPlaceOrder(orderForm: NgForm) {
+    let amount = this.getGrandTotal();
+    this.productService.createTransaction(amount).subscribe(
+      (res: any) => {
+        console.log(res);
+
+        this.openTransactionModel(res, orderForm);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+
+  public openTransactionModel(res: any, orderForm: NgForm) {
+    var options = {
+      orderId: res.orderId,
+      Key: res.key_id,
+      amount: res.amount,
+      currency: res.currency,
+      name: 'wissem',
+      description: 'Payment',
+      image: 'https://www.wissem.com/assets/images/logo.png',
+      handler: (res: any) => {
+        this.processResponse(res, orderForm);
+      },
+      prefill: {
+        name: 'wiss',
+        email: 'tzirw@example.com',
+        contact: '0123456789',
+      },
+      notes: {
+        address: 'eljem',
+      },
+      theme: {
+        color: '#F37254',
+      },
+    };
+    var razorpayObject = new Razorpay(options);
+    razorpayObject.open();
+  }
+  processResponse(res: any, orderForm: NgForm) {
+    this.placeOrder(orderForm);
   }
 }
